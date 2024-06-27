@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const codeSchema = new mongoose.Schema({
   code: { type: String, required: true, unique: true },
-  createdAt: { type: Date, default: Date.now, expires: 60 }, // auto-delete after 60 seconds
+  createdAt: { type: Date, default: Date.now, expires: 60 },
   used: { type: Boolean, default: false },
 });
 
