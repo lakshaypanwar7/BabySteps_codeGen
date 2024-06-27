@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Code Verification App</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Code Verification App</h1>
+
+      <div id="code-display">
+        <button id="refresh-code">Get New Code</button>
+        <p id="code">Click the button to get a code</p>
+      </div>
+
+      <div id="code-input">
+        <input type="text" id="input-code" placeholder="Enter code here" />
+        <button id="submit-code">Submit</button>
+        <p id="message"></p>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("refresh-code").addEventListener("click", () => {
+        fetch("/api/codes")
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("code").textContent = data.code;
+          })
+          .catch((err) => console.error("Error fetching code:", err));
+      });
+
+      document.getElementById("submit-code").addEventListener("click", () => {
+        const code = document.getElementById("input-code").value;
+
+        fetch("/api/codes/use", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ code }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("message").textContent =
+              data.message || data.error;
+          })
+          .catch((err) => console.error("Error submitting code:", err));
+      });
+    </script>
+  </body>
+</html>
